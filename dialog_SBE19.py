@@ -6,12 +6,13 @@ along with the serienummer
 @author: a001109
 """
 
-def checkCtdFileName(ctd=None, confile='.XMLCON'):
+def checkCtdFileName(ctd=None, confile='.xmlcon'):
     import Tkinter, tkFileDialog
     import os
     import time
     import sys
     import shutil
+    import codecs
     root = Tkinter.Tk()
     root.withdraw() #hiding tkinter window 
     
@@ -61,6 +62,7 @@ def checkCtdFileName(ctd=None, confile='.XMLCON'):
         cruise = fname.split('_')[-2]
         cruise = cruise.zfill(2)        
         print 'Cruise: ', cruise     
+        print fname        
         serienummer = fname.split('_')[-1][:4]
         
     elif fname[:5] == 'SBE09' or 'SBE19':     
@@ -69,10 +71,10 @@ def checkCtdFileName(ctd=None, confile='.XMLCON'):
     else:
         sys.exit('could not get "serienummer" from file name %s, stops!' % fname)
            
-    print 'serienummer: ',serienummer, 
+    print 'serienummer: ',serienummer 
     
     # Open the header file or the xml-file (SBE19):
-    with open(file_path,'r') as f:
+    with codecs.open(file_path,'r',encoding='cp1252') as f:
         allHeaderInfo = f.readlines()
     f.closed
 
@@ -202,8 +204,15 @@ def checkCtdFileName(ctd=None, confile='.XMLCON'):
         #print path + '\\' + fname.rsplit('.',1)[0] + confile
         #print path + '\\' + new_fname + confile
         #path = path.replace('/','\\')
-        print (path + '\\' + fname.rsplit('.',1)[0] + confile, path + '\\' + new_fname + confile)
-        os.rename(path + '\\' + fname.rsplit('.',1)[0] + confile, path + '\\' + new_fname + confile)
+        # print (path + '\\' + fname.rsplit('.',1)[0] + confile, path + '\\' + new_fname + confile)
+        # print('fname',fname)
+        # print(fname.rsplit('.',1)[0])
+        # print('confile',confile)
+        # print('path',path)
+        # print('new_fname',new_fname)
+        # print('file',path + '\\' + fname.rsplit('.',1)[0] + confile.lower())
+        print(path, fname, new_fname, confile) #nytt för test
+        os.rename(path + '\\' + fname.rsplit('.',1)[0] + confile.lower(), path + '\\' + new_fname + confile.lower())
         os.rename(path + '\\' + fname.rsplit('.',1)[0] + '.hex', path + '\\' + new_fname + '.hex')
         os.rename(path + '\\' + fname.rsplit('.',1)[0] + '.bl', path + '\\' + new_fname + '.bl')    
     print 'Done with dialog_SBE19.py!'      
