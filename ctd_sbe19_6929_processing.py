@@ -1,13 +1,10 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
 Created on Sat Mar 21 10:01:38 2015
 
 @author: a001985
 ===============================================================================
 NEW COMMENTS
-updated 2025-01-27, New year problem fixed, name and param in some plots fixed.
-updated 2023-12-09, Updated path to server and added year to the path 
-updated 2023-12-05, Added a fluorometer that gives both chla-a fluorescens and turbidity 
 updated 2023-09-21, Found a bugg with the naming of LIMS-job. Wrong self.ship, should be self.ship_intern_ID and an error with self.serie. Use self.serie_no instead. /MHan
 updated 2023-05-12, Added UMF SBE19 (6929) and its config (with fluoremeter, chla and turb and PAR). Changed to a new path to the server onboard Svea /MHan
 updated 2022-10-27, Update of header, latitude, remove position format and fix range problems when read in ODV /MHan
@@ -98,8 +95,8 @@ class CtdProcessing(object):
     deep_surfacesoak = False #normalt False, vid soak omkring 15m vid hög sjö sätt denna till True
     
     #Välj CTD
-    #ctdnumber = '6929'       #UMFs SBE19
-    ctdnumber = '6164'      #SMHIs SBE19    
+    ctdnumber = '6929'       #UMFs SBE19
+    #ctdnumber = '6164'      #SMHIs SBE19    
     #ctdnumber = '1044'
     #ctdnumber = '0745'
     #ctdnumber = '0817'    #FMI
@@ -191,24 +188,11 @@ class CtdProcessing(object):
         
         # Directories
         self.working_directory = 'C:\\ctdSBE19\\temp\\'
-        self.data_directory = 'C:\\ctdSBE19\\data_local\\'
-        #self.raw_files_directory = 'C:\\ctdSBE19\\data_local\\raw\\'
-        #self.plot_directory = 'C:\\ctdSBE19\\data_local\\plots\\'
+        self.data_directory = 'C:\\ctdSBE19\\data\\'
+        self.raw_files_directory = 'C:\\ctdSBE19\\raw\\'
+        self.plot_directory = 'C:\\ctdSBE19\\plots\\'
         #self.shark_file_directory = '\\\\SMHI-AR-SHARK1\\ctd\\seabird\\'
         #self.shark_file_directory_lokal = 'C:\\ctd\\data\\sharkimport\\'
-
-        #Make dir if missing
-        
-        if not os.path.exists(self.data_directory +'20' + self.year + '\\cnv'): 
-            os.makedirs(self.data_directory +'20' + self.year + '\\cnv')
-        if not os.path.exists(self.data_directory +'20' + self.year + '\\cnv\\up_cast\\'): 
-            os.mkdir(self.data_directory +'20' + self.year + '\\cnv\\up_cast\\')            
-        if not os.path.exists(self.data_directory +'20' + self.year + '\\raw\\'): 
-            os.mkdir(self.data_directory +'20' + self.year + '\\raw\\')            
-        if not os.path.exists(self.data_directory +'20' + self.year + '\\plots\\'): 
-            os.mkdir(self.data_directory +'20' + self.year + '\\plots\\')   
-        if not os.path.exists(self.data_directory +'20' + self.year + '\\data\\'): 
-            os.mkdir(self.data_directory +'20' + self.year + '\\data\\')   
         
         # Files
         self.ctdmodule_file = 'ctdmodule.txt'
@@ -330,19 +314,16 @@ class CtdProcessing(object):
             [3,     '%11.5f',   'c0S/m: Conductivity [S/m]', 1],
             [4,     '%11.3f',   'dz/dtM: Descent Rate [m/s]', 1],
             [5,     '%11.4f',   'sbeox0V: Oxygen raw, SBE 43 [V]', 1],
-            [6,     '%11.4f',   'flECO-AFL: Fluorescence, WET Labs ECO-AFL/FL [mg/m^3]', 1],
-            [7,     '%11.4f',   'turbWETntu0: Turbidity, WET Labs ECO [NTU]', 1],  
-            [8,     '%11.3e',   'par: PAR/Irradiance, Biospherical/Licor', 1],
-            [9,     '%11.4f',   'sal00: Salinity, Practical [PSU]', 1],
-            [10,    '%11.4f',   'density00: Density [density, kg/m^3]', 1],
-            [11,    '%11.4f',   'sigma-é00: Density [sigma-theta, kg/m^3]', 1],
-            [12,    '%11.3f',   'depSM: Depth [salt water, m], lat ', 1],
-            [13,    '%11.3f',   'depFM: Depth [true depth, m], lat ', 1],        
-            [14,    '%11.2f',   'svCM: Sound Velocity [Chen-Millero, m/s]', 1],
-            [15,    '%11.4f',   'sbeox0ML/L: Oxygen, SBE 43 [ml/l], WS = 2', 1],
-            [16,    '%11.4f',   'sbeox0PS: Oxygen, SBE 43 [% saturation], WS = 2', 1],
-            [17,    '%11u',     'nbin: number of scans per bin', 1],
-            [18,    '%11.3e',   'flag: flag', 1]]                          
+            [6,     '%11.4f',   'sal00: Salinity, Practical [PSU]', 1],
+            [7,     '%11.4f',   'density00: Density [density, kg/m^3]', 1],
+            [8,     '%11.4f',   'sigma-é00: Density [sigma-theta, kg/m^3]', 1],
+            [9,     '%11.3f',   'depSM: Depth [salt water, m], lat ', 1],
+            [10,    '%11.3f',   'depFM: Depth [true depth, m], lat ', 1],        
+            [11,    '%11.2f',   'svCM: Sound Velocity [Chen-Millero, m/s]', 1],
+            [12,    '%11.4f',   'sbeox0ML/L: Oxygen, SBE 43 [ml/l], WS = 2', 1],
+            [13,    '%11.4f',   'sbeox0PS: Oxygen, SBE 43 [% saturation], WS = 2', 1],
+            [14,    '%11u',     'nbin: number of scans per bin', 1],
+            [15,    '%11.3e',   'flag: flag', 1]]                          
                            
         #----------------------------------------------------------------------        
         #Seabird 19    UMFs
@@ -542,10 +523,8 @@ class CtdProcessing(object):
         
         #SBE19
         if self.ctdNo == '6164': 
-            self.plot1 = 'seaplot /pC:\ctdSBE19\setup\File_1-SeaPlot_SBE19.psa /i' + self.working_directory + 'd' + self.new_fname + '.cnv /a_' + self.stationname + ' /o' + self.data_directory + '20' + self.year + '\\plots\\'   + ' /f' + self.new_fname + '\n'
+            self.plot1 = 'seaplot /pC:\ctdSBE19\setup\File_1-SeaPlot_SBE19.psa /i' + self.working_directory + 'd' + self.new_fname + '.cnv /a_' + self.stationname + ' /o' + self.plot_directory + '20' + self.year + ' /f' + self.new_fname + '\n'
             module_file.write(self.plot1)
-            self.plot2 = 'seaplot /pC:\ctdSBE19\setup\File_2-SeaPlot_SBE19.psa /i' + self.working_directory + 'd' + self.new_fname + '.cnv /a_fluor_turb_par_' + self.stationname + ' /o' + self.data_directory + '20' + self.year + '\\plots\\'   + ' /f' + self.new_fname + '\n'
-            module_file.write(self.plot2)
         elif self.ctdNo == '6929':
             self.plot1 = 'seaplot /pC:\ctdSBE19\setup\File_1-SeaPlot_SBE19_6929.psa /i' + self.working_directory + 'd' + self.new_fname + '.cnv /a_' + self.stationname + ' /o' + self.plot_directory + '20' + self.year + ' /f' + self.new_fname + '\n'
             module_file.write(self.plot1)
@@ -567,13 +546,12 @@ class CtdProcessing(object):
             elif self.cnty == '77' and self.ship == '10':
                 self.plot4 = 'seaplot /pC:\ctd\setup\File_4-SeaPlot_TURB_PAR_Svea.psa /i' + self.working_directory + 'd' + self.new_fname + '.cnv /a_fluor_turb_par_' + self.stationname + ' /o' + self.plot_directory + '20' + self.year + ' /f' + self.new_fname + '\n'                
             else:                
-                self.plot4 = 'seaplot /pC:\ctd\setup\File_4-SeaPlot_TURB_PAR.psa /i' + self.working_directory + 'd' + self.new_fname + '.cnv /a_fluor_turb_par_' + self.stationname + ' /o' + self.plot_directory + '20' + self.year + ' /f' + self.new_fname + '\n'
+                self.plot4 = 'seaplot /pC:\ctd\setup\File_4-SeaPlot_TURB_PAR.psa /i' + self.working_directory + 'd' + self.new_fname + '.cnv /a_fluor_turb_par_' + self.stationnam + ' /o' + self.plot_directory + '20' + self.year + ' /f' + self.new_fname + '\n'
             module_file.write(self.plot4)
         
         #Skriv in stationsnamn i varje plot
         if self.ctdNo in ['6164','6929']: 
-            insert_station_name(self.stationname, 'C:\\ctdSBE19\\setup\\File_1-SeaPlot_SBE19.psa')
-            insert_station_name(self.stationname, 'C:\\ctdSBE19\\setup\\File_2-SeaPlot_SBE19.psa')
+            insert_station_name(self.stationname, 'C:\\ctdSBE19\\setup\\File_1-SeaPlot_SBE19.psa')   
         else:
             insert_station_name(self.stationname, 'C:\\ctd\\setup\\File_1-SeaPlot.psa')
             insert_station_name(self.stationname, 'C:\\ctd\\setup\\File_2-SeaPlot_T_S_difference.psa')
@@ -747,7 +725,7 @@ class CtdProcessing(object):
             #Lägger till enhet till PAR/Irradiance                      
             
             if 'par: PAR/Irradiance' in x:                                  
-                self.ctd_data[0][i] = self.ctd_data[0][i][:-1] + ' [uE/(cm^2*s)]\n'
+                self.ctd_data[0][i] = self.ctd_data[0][i][:-2] + ' [µE/(cm^2*s)]\n'
             #Lägger till Chl-a på den fluorometer som har serialnumber som börjar på FLNTURTD    
             if 'Fluorescence, WET Labs ECO-AFL/FL [mg/m^3]' in x:
                 Fluo_index = i
@@ -769,22 +747,15 @@ class CtdProcessing(object):
                 else:
                     self.ctd_data[0][i] = ('# span %s =%11.3f,%11.3f%6s\n' % (index_true_depth,min(TrueDepth),max(TrueDepth),''))
                         
-            #Fixar en felstavning, [DD MM.mmm N] och lägger til N/E om det saknas. 
+            #Fixar en felstavning i vissa äldra filer. 
             if 'Lattitude' in x:
-                self.ctd_data[0][i] = self.ctd_data[0][i].replace('Lattitude','Latitude')
+                self.ctd_data[0][i] = self.ctd_data[0][i].replace('Lattitude [GG MM.mm N]','Latitude')
             #Tar bort [GG MM.mm N] från lat och long så att filen går att läsa in i ODV.        
-            if '** Latitude [DD MM.mmm N]' in x:
-                self.ctd_data[0][i] = self.ctd_data[0][i].replace(' [DD MM.mmm N]','')
-            if '** Longitude [DD MM.mmm E]' in x:
-                self.ctd_data[0][i] = self.ctd_data[0][i].replace(' [DD MM.mmm E]','')
-                #Add N and E if missing
-            if '** Latitude' in self.ctd_data[0][i] and 'N' not in self.ctd_data[0][i]:       
-                print 'Adds N to Latitude since missing'                
-                self.ctd_data[0][i] = self.ctd_data[0][i].rstrip() + ' N\n'
-            if '** Longitude' in self.ctd_data[0][i] and 'E' not in self.ctd_data[0][i]:              
-                print 'Adds E to Longitude since missing'                
-                self.ctd_data[0][i] = self.ctd_data[0][i].rstrip() + ' E\n'                  
-                   
+            if '** Latitude [GG MM.mm N]' in x:
+                self.ctd_data[0][i] = self.ctd_data[0][i].replace(' [GG MM.mm N]','')
+            if '** Longitude [GG MM.mm E]' in x:
+                self.ctd_data[0][i] = self.ctd_data[0][i].replace(' [GG MM.mm E]','')
+                
             # # span 0 =        900,       1295  hämtar span för scan som skall manipuleras   
             if '# span 0' in x:
                 span_0 = self.ctd_data[0][i].split('=')[1].replace(' ','').split(',')[0]
@@ -822,34 +793,22 @@ class CtdProcessing(object):
                             self.ctd_data[0][i] = ('# span %s = -9.990e-29, -9.990e-29%6s\n' % (index_sensor,''))
         
         #TODO: Lägg till if sats som skapar kataloger vid nytt år. /MHAN
-        if not os.path.exists(self.data_directory +'20' + self.year + '\\cnv\\'): 
-            os.mkdir(self.data_directory +'20' + self.year + '\\cnv\\')
-        if not os.path.exists(self.data_directory +'20' + self.year + '\\cnv\\up_cast\\'): 
-            os.mkdir(self.data_directory +'20' + self.year + '\\cnv\\up_cast\\')            
-        if not os.path.exists(self.data_directory +'20' + self.year + '\\raw\\'): 
-            os.mkdir(self.data_directory +'20' + self.year + '\\raw\\')            
-        if not os.path.exists(self.data_directory +'20' + self.year + '\\plots\\'): 
-            os.mkdir(self.data_directory +'20' + self.year + '\\plots\\')   
-        if not os.path.exists(self.data_directory +'20' + self.year + '\\data\\'): 
-            os.mkdir(self.data_directory +'20' + self.year + '\\data\\')   
-
-        filelist=os.walk(self.data_directory +'20' + self.year + '\cnv\\').next()[2]
+        if not os.path.exists(self.data_directory +'20' + self.year + '\\'): #hoppas denna funkar /OBac
+            os.mkdir(self.data_directory +'20' + self.year + '\\')
+        
+        filelist=os.walk(self.data_directory +'20' + self.year + '\\').next()[2]
         
         # print filelist
-        #self.working_directory = 'C:\\ctdSBE19\\temp\\'
-        #self.data_directory = 'C:\\ctdSBE19\\data_local\\'
-        #self.raw_files_directory = 'C:\\ctdSBE19\\data_local\\raw\\'
-        #self.plot_directory = 'C:\\ctdSBE19\\data_local\\plots\\'
         # print self.data_directory +'20' + self.year + '\\'
         
         if not self.new_fname + '.cnv' in filelist:
             #Skriver tillbaka header self.ctd_data[0], 
-            test_file = open(self.data_directory +'20' + self.year + '\\cnv\\' + self.new_fname + '.cnv', 'w')
+            test_file = open(self.data_directory +'20' + self.year + '\\' + self.new_fname + '.cnv', 'w')
             test_file.writelines(self.ctd_data[0])
             test_file.close()
             
             #och lägger tillbaka data self.ctd_data[2] till samma fil
-            test_file = open(self.data_directory +'20' + self.year + '\\cnv\\' + self.new_fname + '.cnv', "a")
+            test_file = open(self.data_directory +'20' + self.year + '\\' + self.new_fname + '.cnv', "a")
             for row in self.ctd_data[2]:
                 row_to_write, bad_flag = self.get_string_for_data_file(row)
                     
@@ -880,27 +839,27 @@ class CtdProcessing(object):
             os.remove(self.working_directory + 'd' + self.new_fname + '.cnv')
             os.remove(self.working_directory + self.new_fname + '.cnv')
                    
-            shutil.move(self.working_directory + 'u' + self.new_fname + '.cnv', self.data_directory + '20' + self.year + '\\cnv\\up_cast')
-            shutil.move(self.working_directory + self.new_fname + self.ctdconfig, self.data_directory + '20' + self.year + '\\raw')
-            shutil.move(self.working_directory + self.new_fname + '.hex', self.data_directory + '20' + self.year + '\\raw')
-            shutil.move(self.working_directory + self.new_fname + '.xml', self.data_directory + '20' + self.year + '\\raw')
+            shutil.move(self.working_directory + 'u' + self.new_fname + '.cnv', self.data_directory + '20' + self.year + '\\up_cast')
+            shutil.move(self.working_directory + self.new_fname + self.ctdconfig, self.raw_files_directory + '20' + self.year)
+            shutil.move(self.working_directory + self.new_fname + '.hex', self.raw_files_directory + '20' + self.year)
+            shutil.move(self.working_directory + self.new_fname + '.xml', self.raw_files_directory + '20' + self.year)
             try:
-                shutil.move(self.working_directory + self.new_fname + '.hdr', self.data_directory + '20' + self.year + '\\raw')
+                shutil.move(self.working_directory + self.new_fname + '.hdr', self.raw_files_directory + '20' + self.year)
             except:
                 print('No .hdr file to move')
             
             try:
-                shutil.move(self.working_directory + self.new_fname + '.bl', data_directory + '20' + self.year + '\\raw')
+                shutil.move(self.working_directory + self.new_fname + '.bl', self.raw_files_directory + '20' + self.year)
             except:
                 print('No .btl file to move')
                 
             try: 
-                shutil.move(self.working_directory + self.new_fname + '.btl', data_directory + '20' + self.year + '\\raw')
+                shutil.move(self.working_directory + self.new_fname + '.btl', self.raw_files_directory + '20' + self.year)
             except:
                 print('No .btl file to move')
                 
             try:
-                shutil.move(self.working_directory + self.new_fname + '.ros', data_directory + '20' + self.year + '\\raw')
+                shutil.move(self.working_directory + self.new_fname + '.ros', self.raw_files_directory + '20' + self.year)
             except:
                 print('No .ros file to move')            
             
@@ -911,12 +870,12 @@ class CtdProcessing(object):
             # q = 'Y'
             if q.upper() == 'Y': # om Y; skriv över filen
                 #Skriver tillbaka header self.ctd_data[0], 
-                test_file = open(self.data_directory + '20' + self.year + '\\cnv\\' + self.new_fname + '.cnv', 'w')
+                test_file = open(self.data_directory + '20' + self.year + '\\' + self.new_fname + '.cnv', 'w')
                 test_file.writelines(self.ctd_data[0])
                 test_file.close()
                 
                 #och lägger tillbaka data self.ctd_data[2] till samma fil
-                test_file = open(self.data_directory+ '20' + self.year + '\\cnv\\' + self.new_fname + '.cnv', "a")
+                test_file = open(self.data_directory+ '20' + self.year + '\\' + self.new_fname + '.cnv', "a")
                 for row in self.ctd_data[2]:
                     row_to_write, bad_flag = self.get_string_for_data_file(row)
                     
@@ -944,69 +903,69 @@ class CtdProcessing(object):
                 
                 # ta bort äldre filer och kopiera över det nya
                 try:
-                    os.remove(self.data_directory + '20' + self.year + '\\cnv\\up_cast\\u' + self.new_fname + '.cnv')
+                    os.remove(self.data_directory + '20' + self.year + '\\up_cast\\u' + self.new_fname + '.cnv')
                 except:
                     print('No old up_cast file to delete')
                 try:
-                    os.remove(self.data_directory + '20' + self.year + '\\raw\\' +  self.new_fname + self.ctdconfig)
+                    os.remove(self.raw_files_directory + '20' + self.year + '\\' +  self.new_fname + self.ctdconfig)
                 except:
                     pass
                     
                 try:
-                    os.remove(self.data_directory + '20' + self.year + '\\raw\\' +  self.new_fname + '.hex')
+                    os.remove(self.raw_files_directory + '20' + self.year + '\\' +  self.new_fname + '.hex')
                 except:
                     pass
 
                 try:
-                    os.remove(self.data_directory + '20' + self.year + '\\raw\\' +  self.new_fname + '.xml')
+                    os.remove(self.raw_files_directory + '20' + self.year + '\\' +  self.new_fname + '.xml')
                 except:
                     pass
                 
                 try:
-                    os.remove(self.data_directory + '20' + self.year + '\\raw\\' +  self.new_fname + '.hdr')
+                    os.remove(self.raw_files_directory + '20' + self.year + '\\' +  self.new_fname + '.hdr')
                 except:
                     pass
                     
                 try:
-                    os.remove(self.data_directory + '20' + self.year + '\\raw\\' +  self.new_fname + '.bl')
+                    os.remove(self.raw_files_directory + '20' + self.year + '\\' +  self.new_fname + '.bl')
                 except:
                     pass
                     
                 try:
-                    os.remove(self.data_directory + '20' + self.year + '\\raw\\' +  self.new_fname + '.btl')
+                    os.remove(self.raw_files_directory + '20' + self.year + '\\' +  self.new_fname + '.btl')
                 except:
                     print('No old .btl file to delete')
                 try:
-                    os.remove(self.data_directory + '20' + self.year + '\\raw\\' +  self.new_fname + '.ros')
+                    os.remove(self.raw_files_directory + '20' + self.year + '\\' +  self.new_fname + '.ros')
                 except:
                     print('No old .ros file to delete')
                 
                 print 'work', self.working_directory + 'u' + self.new_fname + '.cnv'
-                print 'data', self.data_directory + '20' + self.year + '\\cnv\\up_cast'
+                print 'data', self.data_directory + '20' + self.year + '\\up_cast'
                 
                 #TODO
                 # copy up-cast
-                shutil.move(self.working_directory + 'u' + self.new_fname + '.cnv', self.data_directory + '20' + self.year + '\\cnv\\up_cast')
-                shutil.move(self.working_directory + self.new_fname + self.ctdconfig, self.data_directory + '20' + self.year + '\\raw')
-                shutil.move(self.working_directory + self.new_fname + '.hex', self.data_directory + '20' + self.year + '\\raw')
-                shutil.move(self.working_directory + self.new_fname + '.xml', self.data_directory + '20' + self.year + '\\raw')
+                shutil.move(self.working_directory + 'u' + self.new_fname + '.cnv', self.data_directory + '20' + self.year + '\\up_cast')
+                shutil.move(self.working_directory + self.new_fname + self.ctdconfig, self.raw_files_directory + '20' + self.year)
+                shutil.move(self.working_directory + self.new_fname + '.hex', self.raw_files_directory + '20' + self.year)
+                shutil.move(self.working_directory + self.new_fname + '.xml', self.raw_files_directory + '20' + self.year)
                 try:
-                    shutil.move(self.working_directory + self.new_fname + '.hdr', self.data_directory + '20' + self.year + '\\raw')
+                    shutil.move(self.working_directory + self.new_fname + '.hdr', self.raw_files_directory + '20' + self.year)
                 except:
                     print('No .hdr file to move')
                 
                 try:
-                    shutil.move(self.working_directory + self.new_fname + '.bl', self.data_directory + '20' + self.year + '\\raw')
+                    shutil.move(self.working_directory + self.new_fname + '.bl', self.raw_files_directory + '20' + self.year)
                 except:
                     print('No .bl file to move')
                 
                 try:
-                    shutil.move(self.working_directory + self.new_fname + '.btl', self.data_directory + '20' + self.year + '\\raw')
+                    shutil.move(self.working_directory + self.new_fname + '.btl', self.raw_files_directory + '20' + self.year)
                 except:
                     print('No .btl file to move')
                     
                 try:
-                    shutil.move(self.working_directory + self.new_fname + '.ros', self.data_directory + '20' + self.year + '\\raw')
+                    shutil.move(self.working_directory + self.new_fname + '.ros', self.raw_files_directory + '20' + self.year)
                 except:
                     print('No .ros file to move')
     
@@ -1024,79 +983,73 @@ class CtdProcessing(object):
                 server_plot_dir = '\\\\scifi01\\scifi\\Processed\\mchdvideo\\CTD_SBE19\\plots\\'
                 server_raw_dir =  '\\\\scifi01\\scifi\\Processed\\mchdvideo\\CTD_SBE19\\raw\\'
             else:
-                server_data_dir = '\\\\scifi01.svea.slu.se\\Processed$\\CTD\\20' + self.year + '\\cnv\\'
+                server_data_dir = '\\\\scifi01.svea.slu.se\\Processed$\\McSeabirdChem\\cnv\\'
                 #server_data_dir = '\\\\scifi01\\scifi\\Processed\\mcseabirdchem\\data\\'            
-                server_plot_dir = '\\\\scifi01.svea.slu.se\\Processed$\\CTD\\20' + self.year + '\\plots\\'
+                server_plot_dir = '\\\\scifi01.svea.slu.se\\Processed$\\McSeabirdChem\\plots\\'
                 #server_plot_dir = '\\\\scifi01\\scifi\\Processed\\mcseabirdchem\\plots\\'
-                server_raw_dir = '\\\\scifi01.svea.slu.se\\Processed$\\CTD\\20' + self.year + '\\raw\\'
+                server_raw_dir = '\\\\scifi01.svea.slu.se\\Processed$\\McSeabirdChem\\raw\\'
                 #server_raw_dir =  '\\\\scifi01\\scifi\\Processed\\mcseabirdchem\\raw\\'
             
-            # Data - cnv
-            if not os.path.exists(server_data_dir): 
+            # Data
+            if not os.path.exists(server_data_dir + '\\20' + self.year + '\\'): 
                 try:
-                    os.makedirs(server_data_dir)
-                except:
-                     print 'Can not connect to server...!'
-            # Data - cnv\up_cast            
-            if not os.path.exists(server_data_dir + 'up_cast'): 
-                try:
-                    os.makedirs(server_data_dir + 'up_cast')
+                    os.mkdir(server_data_dir +'20' + self.year + '\\')
                 except:
                      print 'Can not connect to server...!'
             # Raw
-            if not os.path.exists(server_raw_dir): 
+            if not os.path.exists(server_raw_dir +'\\20' + self.year + '\\'): 
                 try:
-                    os.mkdir(server_raw_dir)                
+                    os.mkdir(server_raw_dir +'20' + self.year + '\\')                
                 except:
                      print 'Can not connect to server...!'            
             # Plots
-            if not os.path.exists(server_plot_dir): 
+            if not os.path.exists(server_plot_dir +'\\20' + self.year + '\\'): 
                 try:
-                    os.mkdir(server_plot_dir)
+                    os.mkdir(server_plot_dir +'20' + self.year + '\\')
                 except:
                      print 'Can not connect to server...!'                
             
             # Data (cnv)
             try:
-                shutil.copyfile(self.data_directory + '\\20' + self.year + '\\cnv\\' + self.new_fname + '.cnv', server_data_dir + self.new_fname + '.cnv')
+                shutil.copyfile(self.data_directory + '\\20' + self.year + '\\' + self.new_fname + '.cnv', server_data_dir + '\\20' + self.year + '\\' + self.new_fname + '.cnv')
             except:
                 print 'Cant copy cnv file to file server!'
             # up-cast
             try:
-                shutil.copyfile(self.data_directory + '\\20' + self.year + '\\cnv\\' + 'up_cast' + '\\' + 'u' + self.new_fname + '.cnv', server_data_dir + 'up_cast' + '\\' + 'u' + self.new_fname + '.cnv')
-                #print self.data_directory + '\\20' + self.year + '\\cnv\\up_cast\\u' + self.new_fname + '.cnv' + server_data_dir + 'up_cast' + '\\' + 'u' + self.new_fname + '.cnv')
+                shutil.copyfile(self.data_directory + '\\20' + self.year + '\\' + 'up_cast' + '\\' + 'u' + self.new_fname + '.cnv', server_data_dir + '\\20' + self.year + '\\' + 'up_cast' + '\\' + 'u' + self.new_fname + '.cnv')
+                print self.data_directory + '\\20' + self.year + '\\' + 'up_cast' + '\\' + 'u' + self.new_fname + '.cnv', server_data_dir + '\\20' + self.year + '\\' + 'up_cast' + '\\' + 'u' + self.new_fname + '.cnv'
             except:
                 print 'Cant copy cnv upcast to file server!'
             
             # renamed Raw files
             # bl btl hdr hex ros XMLCON
             try:
-                shutil.copyfile(self.data_directory + '\\20' + self.year + '\\raw\\' + self.new_fname + '.bl', server_raw_dir + self.new_fname + '.bl')
+                shutil.copyfile(self.raw_files_directory + '\\20' + self.year + '\\' + self.new_fname + '.bl', server_raw_dir + '\\20' + self.year + '\\' + self.new_fname + '.bl')
             except:
                 print 'Cant copy raw.bl file to file server!'
             try:
-                shutil.copyfile(self.data_directory + '\\20' + self.year + '\\raw\\' + self.new_fname + '.btl', server_raw_dir + self.new_fname + '.btl')
+                shutil.copyfile(self.raw_files_directory + '\\20' + self.year + '\\' + self.new_fname + '.btl', server_raw_dir + '\\20' + self.year + '\\' + self.new_fname + '.btl')
             except:
                 print 'Cant copy raw.btl file to file server!'
             try:
-                shutil.copyfile(self.data_directory + '\\20' + self.year + '\\raw\\' + self.new_fname + '.hdr', server_raw_dir + self.new_fname + '.hdr')
+                shutil.copyfile(self.raw_files_directory + '\\20' + self.year + '\\' + self.new_fname + '.hdr', server_raw_dir + '\\20' + self.year + '\\' + self.new_fname + '.hdr')
             except:
                 print 'Cant copy raw.hdr file to file server!'
             try:
-                shutil.copyfile(self.data_directory + '\\20' + self.year + '\\raw\\' + self.new_fname + '.hex', server_raw_dir + self.new_fname + '.hex')
+                shutil.copyfile(self.raw_files_directory + '\\20' + self.year + '\\' + self.new_fname + '.hex', server_raw_dir + '\\20' + self.year + '\\' + self.new_fname + '.hex')
             except:
                 print 'Cant copy raw.hex file to file server!'
             if self.ctdnumber == '6164':
                 try:
-                    shutil.copyfile(self.data_directory + '\\20' + self.year + '\\raw\\' + self.new_fname + '.xml', server_raw_dir + self.new_fname + '.xml')
+                    shutil.copyfile(self.raw_files_directory + '\\20' + self.year + '\\' + self.new_fname + '.xml', server_raw_dir + '\\20' + self.year + '\\' + self.new_fname + '.xml')
                 except:
                     print 'Cant copy raw.hex file to file server!'
             try:
-                shutil.copyfile(self.data_directory + '\\20' + self.year + '\\raw\\' + self.new_fname + '.ros', server_raw_dir + self.new_fname + '.ros')
+                shutil.copyfile(self.raw_files_directory + '\\20' + self.year + '\\' + self.new_fname + '.ros', server_raw_dir + '\\20' + self.year + '\\' + self.new_fname + '.ros')
             except:
                 print 'Cant copy raw.ros file to file server!'
             try:
-                shutil.copyfile(self.data_directory + '\\20' + self.year + '\\raw\\' + self.new_fname + '.XMLCON', server_raw_dir + self.new_fname + '.XMLCON')
+                shutil.copyfile(self.raw_files_directory + '\\20' + self.year + '\\' + self.new_fname + '.XMLCON', server_raw_dir + '\\20' + self.year + '\\' + self.new_fname + '.XMLCON')
             except:
                 print 'Cant copy raw.XMLCON file to file server!'
             
@@ -1104,22 +1057,22 @@ class CtdProcessing(object):
             # Plots
             try:
                 filename =  'd' + self.new_fname + '_' + self.stationname + '.jpg'
-                shutil.copyfile(self.data_directory + '\\20' + self.year + '\\plots\\' + filename, server_plot_dir + filename)
+                shutil.copyfile(self.plot_directory + '\\20' + self.year + '\\' + filename, server_plot_dir + '\\20' + self.year + '\\' + filename)
             except:
                 print 'Cant copy CTD plot to file server!'
             try:
                 filename = 'd' + self.new_fname + '_TS_diff_' + self.stationname + '.jpg'
-                shutil.copyfile(self.data_directory + '\\20' + self.year + '\\plots\\' + filename, server_plot_dir + filename)
+                shutil.copyfile(self.plot_directory + '\\20' + self.year + '\\' + filename, server_plot_dir + '\\20' + self.year + '\\' + filename)
             except:
                 print 'Cant copy CTD TS_diff plot to file server!'
             try:
                 filename = 'd' + self.new_fname + '_oxygen_diff_' + self.stationname + '.jpg'
-                shutil.copyfile(self.data_directory + '\\20' + self.year + '\\plots\\' + filename, server_plot_dir + filename)
+                shutil.copyfile(self.plot_directory + '\\20' + self.year + '\\' + filename, server_plot_dir + '\\20' + self.year + '\\' + filename)
             except:
                 print 'Cant copy CTD oxygen_diff plot to file server!'
             try:
                 filename = 'd' + self.new_fname + '_fluor_turb_par_' + self.stationname + '.jpg'
-                shutil.copyfile(self.data_directory + '\\20' + self.year + '\\plots\\' + filename, server_plot_dir + filename)
+                shutil.copyfile(self.plot_directory + '\\20' + self.year + '\\' + filename, server_plot_dir + '\\20' + self.year + '\\' + filename)
             except:
                 print 'Cant copy CTD fluor_turb_par plot to file server!'
             
@@ -1161,7 +1114,7 @@ class CtdProcessing(object):
             os.mkdir(myFileDir)    
 
         #öppna filen, endast läsning
-        file1 = open(self.data_directory + '\\20' + self.year + '\\cnv\\'+ self.new_fname + '.cnv','r')  
+        file1 = open(self.data_directory + '\\20' + self.year + '\\'+ self.new_fname + '.cnv','r')  
         names = self.new_fname
         value = np.array([])
 
