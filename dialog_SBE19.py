@@ -100,6 +100,7 @@ def checkCtdFileName(ctd=None, confile='.xmlcon'):
             if '* cast' in rows:
                 datestring = rows[11:28]
             if '** Station:' in rows:
+                #Remove shit from the filename
                 stationname = rows[11:].strip(' \r\n')
             else:
                 #CTDdata från Dana har stationsnamn men inget '** Station:'
@@ -123,10 +124,10 @@ def checkCtdFileName(ctd=None, confile='.xmlcon'):
     elif fname[:2] == 'SV': #nytt Svea, 2019-10-02 jkro
         new_fname = 'SBE09_' + ctd + '_' + datum + '_77_10_' + serienummer
         #SBE19_6164_20110801_1550_77_10_0053...old format
-    elif fname[:5] == 'SBE19'and ctd in ['6164','6929'] and '77SE' not in fname:    
+    elif fname[:5] == 'SBE19'and ctd in ['6164','6929','8438'] and '77SE' not in fname:    
         new_fname = 'SBE19_' + ctd + '_' + datum + '_77_10_' + serienummer
         #SBE19_6164_20110801_1550_77SE_01_0053....new format
-    elif fname[:5] == 'SBE19'and ctd in ['6164','6929'] and '77SE' in fname:    
+    elif fname[:5] == 'SBE19'and ctd in ['6164','6929','8438'] and '77SE' in fname:    
         new_fname = 'SBE19_' + ctd + '_' + datum + '_77SE_' + cruise + '_' + serienummer                
     elif fname[:5] == 'SBE19' and ctd == '6537':    
         new_fname = fname.split('.')[0]
@@ -142,7 +143,7 @@ def checkCtdFileName(ctd=None, confile='.xmlcon'):
     #fname = 'SBE19_0745_20110409_0522_77_28_0053.hex'
     
     #Hämta aktuell xmlcon fil och kopierar den till rätt ställe.    
-    file_path_xmlcon = tkFileDialog.askopenfilename(title="Open file", initialdir="C:\\ctdSBE19\\setup",
+    file_path_xmlcon = tkFileDialog.askopenfilename(title="Open file", initialdir="C:\\ctdSBE19\\ctd_config\\SBE\\XMLCON\\SBE19",
     filetypes=[("xmlcon",".xmlcon")]) 
     
     shutil.copy(file_path_xmlcon,path + '/' + new_fname + '.xmlcon')
@@ -169,7 +170,7 @@ def checkCtdFileName(ctd=None, confile='.xmlcon'):
                     sys.exit('Fel instrumentnamn!')                          
             if counter == 2:
                 #print counter        
-                if part not in ['0745','1044','0817','0403','0827', '1387','6164','6537','6929']:        
+                if part not in ['0745','1044','0817','0403','0827', '1387','6164','6537','6929','8438']:        
                     sys.exit('Fel intrument serienummer!')                      
             if counter == 3:
                 #print counter        
